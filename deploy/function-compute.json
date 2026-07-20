@@ -1,0 +1,35 @@
+{
+  "functionName": "qwen-opspilot",
+  "description": "Evidence-first Qwen Autopilot Agent with signed simulated remediation",
+  "runtime": "custom.debian12",
+  "cpu": 0.35,
+  "memorySize": 512,
+  "diskSize": 512,
+  "timeout": 120,
+  "instanceConcurrency": 1,
+  "caPort": 9000,
+  "customRuntimeConfig": {
+    "command": [
+      "python3"
+    ],
+    "args": [
+      "app.py"
+    ],
+    "port": 9000
+  },
+  "environmentVariables": {
+    "DASHSCOPE_API_KEY": "SET_IN_FUNCTION_COMPUTE_CONSOLE_NOT_IN_SOURCE",
+    "DASHSCOPE_BASE_URL": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+    "QWEN_MODEL": "qwen3.7-plus",
+    "OPSPILOT_HMAC_SECRET": "SET_A_NEW_32_PLUS_CHARACTER_SECRET_IN_CONSOLE",
+    "OPSPILOT_BIND_HOST": "0.0.0.0"
+  },
+  "network": {
+    "allowDefaultNicToAccessInternet": true,
+    "reason": "Required for the server-side Qwen Cloud HTTPS request"
+  },
+  "publicHttpTrigger": {
+    "enabled": true,
+    "authentication": "anonymous-for-hackathon-demo"
+  }
+}

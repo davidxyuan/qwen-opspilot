@@ -67,6 +67,8 @@ Without Qwen credentials, the deterministic offline suite passes and the single 
 
 Create a **Web Function** using **Custom Runtime / Python**. Upload a ZIP whose root contains `app.py`, `fixtures/`, and `static/`.
 
+The repository includes a secret-free [Function Compute configuration example](deploy/function-compute.json) that documents the custom runtime, listener port, instance concurrency, outbound network need, and server-side environment contract.
+
 Use these runtime settings:
 
 - Startup command: `python3 app.py`
