@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="opspilot-api-base" content="https://qwen-opspilot-monmjgpcrk.ap-southeast-1.fcapp.run">
+  <title>Qwen OpsPilot</title>
+  <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Evidence first. Human approval required.</p>
+    <h1>Qwen OpsPilot</h1>
+    <p>Diagnose an anonymized Windows incident with Qwen, review one guarded simulated change, and leave with a verification-ready audit report.</p>
+  </header>
+
+  <main>
+    <section class="status-panel" aria-labelledby="status-title">
+      <div>
+        <h2 id="status-title">Investigation status</h2>
+        <p id="status" role="status" aria-live="polite">Idle</p>
+      </div>
+      <div class="controls">
+        <button id="load-button" type="button">Load / Reset</button>
+        <button id="run-button" type="button">Run Investigation</button>
+        <button id="policy-button" class="secondary" type="button">Show Policy Denial</button>
+      </div>
+    </section>
+
+    <section aria-labelledby="symptom-title">
+      <h2 id="symptom-title">Symptom</h2>
+      <p id="symptom">Load the bundled incident to begin.</p>
+      <p class="meta">Fixture hash: <code id="fixture-hash">not loaded</code></p>
+    </section>
+
+    <section aria-labelledby="provenance-title">
+      <h2 id="provenance-title">Qwen provenance</h2>
+      <dl id="provenance" class="fact-list"></dl>
+    </section>
+
+    <section aria-labelledby="timeline-title">
+      <h2 id="timeline-title">Ordered timeline</h2>
+      <ol id="timeline" class="timeline"></ol>
+    </section>
+
+    <section aria-labelledby="plan-title">
+      <h2 id="plan-title">Investigation plan</h2>
+      <ol id="plan"></ol>
+    </section>
+
+    <section aria-labelledby="trace-title">
+      <h2 id="trace-title">Read-only tool trace</h2>
+      <ol id="tool-trace" class="timeline"></ol>
+    </section>
+
+    <section aria-labelledby="evidence-title">
+      <h2 id="evidence-title">Host evidence</h2>
+      <div class="host-grid">
+        <article><h3>Host A</h3><dl id="host-a" class="fact-list"></dl></article>
+        <article><h3>Host B</h3><dl id="host-b" class="fact-list"></dl></article>
+      </div>
+    </section>
+
+    <section aria-labelledby="diagnosis-title">
+      <h2 id="diagnosis-title">Diagnosis</h2>
+      <div class="diagnosis-grid">
+        <article><h3>Observed facts</h3><ul id="observed"></ul></article>
+        <article><h3>Inference</h3><ul id="inferences"></ul></article>
+      </div>
+      <h3>Root cause</h3>
+      <p id="root-cause">Awaiting investigation.</p>
+      <p><strong>Confidence:</strong> <span id="confidence">Not available</span></p>
+      <h3>Decisive evidence</h3>
+      <ul id="decisive-evidence"></ul>
+      <h3>Ruled out</h3>
+      <ul id="ruled-out"></ul>
+    </section>
+
+    <section aria-labelledby="policy-title">
+      <h2 id="policy-title">Policy result</h2>
+      <pre id="policy-result">No policy check run.</pre>
+    </section>
+
+    <section id="proposal-section" class="simulation-panel" aria-labelledby="proposal-title" hidden>
+      <div class="section-heading">
+        <div>
+          <p id="simulation-label" class="simulation-label">Simulated</p>
+          <h2 id="proposal-title">Guarded remediation proposal</h2>
+        </div>
+        <p class="safety-copy">No real host or Scheduled Task will be changed.</p>
+      </div>
+      <h3 id="proposal-name"></h3>
+      <p id="proposal-outcome"></p>
+      <div class="proposal-grid">
+        <article>
+          <h3>Exact change</h3>
+          <ul id="proposal-changes"></ul>
+        </article>
+        <article>
+          <h3>Prerequisites</h3>
+          <ul id="proposal-prerequisites"></ul>
+        </article>
+        <article>
+          <h3>S4U limitations</h3>
+          <ul id="proposal-limitations"></ul>
+        </article>
+        <article>
+          <h3>Rollback</h3>
+          <ul id="proposal-rollback"></ul>
+        </article>
+      </div>
+      <h3>Verification contract</h3>
+      <ul id="proposal-checks" class="check-list"></ul>
+      <dl class="integrity-grid">
+        <dt>Run hash</dt><dd><code id="run-hash"></code></dd>
+        <dt>Proposal hash</dt><dd><code id="proposal-hash"></code></dd>
+        <dt>Approval expires</dt><dd id="approval-expiry"></dd>
+      </dl>
+      <div class="controls decision-controls">
+        <button id="approve-button" type="button" disabled>Approve simulated change</button>
+        <button id="reject-button" class="danger" type="button" disabled>Reject</button>
+      </div>
+    </section>
+
+    <section id="decision-section" aria-labelledby="decision-title" hidden>
+      <div class="section-heading">
+        <div>
+          <p id="decision-label" class="simulation-label">Simulated decision</p>
+          <h2 id="decision-title">Decision and deterministic verification</h2>
+        </div>
+        <button id="report-button" class="secondary" type="button" disabled>Download audit report</button>
+      </div>
+      <p id="decision-summary"></p>
+      <div class="host-grid">
+        <article><h3>Before</h3><dl id="before-state" class="fact-list"></dl></article>
+        <article><h3>After</h3><dl id="after-state" class="fact-list"></dl></article>
+      </div>
+      <h3>Verification checks</h3>
+      <ul id="verification-results" class="check-list"></ul>
+    </section>
+  </main>
+  <script src="../static/app.js" defer></script>
+</body>
+</html>

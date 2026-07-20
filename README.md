@@ -2,6 +2,8 @@
 
 Qwen OpsPilot is a safe Autopilot Agent for a recurring Windows operations problem: one scheduled watchdog flashes a PowerShell window on the signed-in desktop while an equivalent watchdog stays invisible on another host.
 
+**Live demo:** [Qwen OpsPilot on GitHub Pages](https://davidxyuan.github.io/qwen-opspilot/docs/)
+
 The app gives Qwen an ambiguous symptom, lets it produce an investigation plan, executes only four schema-validated read-only fixture tools, and requires evidence citations before it can identify the decisive `InteractiveToken` versus `S4U` session difference. A human can then approve or reject one signed **simulated** remediation. The approved path changes only a request-scoped clone, runs five deterministic checks, and downloads an audit report. It never changes a real host.
 
 ## Why Track 4: Autopilot Agent
@@ -17,7 +19,7 @@ The app gives Qwen an ambiguous symptom, lets it produce an investigation plan, 
 
 ![Qwen OpsPilot architecture](docs/architecture.svg)
 
-The browser talks only to the same-origin Python service. The service owns the Qwen API key, HMAC secret, allowlisted tool schemas, immutable fixture, and report validation. No secret is returned to the browser or included in the report.
+The public browser UI is served by GitHub Pages and calls the Alibaba Cloud Function Compute backend from one allowlisted origin. The service owns the Qwen API key, HMAC secret, allowlisted tool schemas, immutable fixture, and report validation. No secret is returned to the browser or included in the report.
 
 ## Demo flow
 
@@ -67,6 +69,8 @@ Without Qwen credentials, the deterministic offline suite passes and the single 
 
 Create a **Web Function** using **Custom Runtime / Python**. Upload a ZIP whose root contains `app.py`, `fixtures/`, and `static/`.
 
+On Windows, build the ZIP with a tool that stores POSIX `/` separators (for example, `tar.exe -a -c -f package.zip app.py fixtures static`). PowerShell `Compress-Archive` stores `\` in entry names, which prevents Linux runtimes from finding nested files.
+
 The repository includes a secret-free [Function Compute configuration example](deploy/function-compute.json) that documents the custom runtime, listener port, instance concurrency, outbound network need, and server-side environment contract.
 
 Use these runtime settings:
@@ -87,6 +91,8 @@ Set these server-side environment variables in Function Compute:
 | `OPSPILOT_BIND_HOST` | `0.0.0.0` |
 
 Function Compute supplies the configured custom listener port through `FC_CUSTOM_LISTEN_PORT`; the app also accepts `PORT` as a fallback. Check `/api/health` after deployment, then run the complete browser demo.
+
+Alibaba Cloud's default Function Compute domain adds `Content-Disposition: attachment`, so the judge-facing UI is hosted by GitHub Pages while all investigation, Qwen, approval, verification, and report APIs remain on Function Compute. The backend allows cross-origin reads only from `https://davidxyuan.github.io`.
 
 ## Safety model
 

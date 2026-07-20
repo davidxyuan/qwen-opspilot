@@ -39,6 +39,7 @@ APPROVAL_TTL_SECONDS = 15 * 60
 REPORT_TTL_SECONDS = 60 * 60
 PROVIDER = "Alibaba Cloud Model Studio"
 DEFAULT_MODEL = "qwen3.7-plus"
+PUBLIC_APP_ORIGIN = "https://davidxyuan.github.io"
 QWEN_CLOUD_HOST = "dashscope-intl.aliyuncs.com"
 SINGAPORE_HOST_SUFFIX = ".ap-southeast-1.maas.aliyuncs.com"
 RUN_LOCK = threading.Lock()
@@ -129,6 +130,10 @@ def send_security_headers(handler: BaseHTTPRequestHandler) -> None:
         "default-src 'self'; base-uri 'none'; frame-ancestors 'none'; "
         "form-action 'none'; object-src 'none'",
     )
+    handler.send_header("Access-Control-Allow-Origin", PUBLIC_APP_ORIGIN)
+    handler.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+    handler.send_header("Access-Control-Allow-Headers", "Content-Type")
+    handler.send_header("Access-Control-Max-Age", "600")
 
 
 class _NoRedirectHandler(HTTPRedirectHandler):
@@ -1200,6 +1205,15 @@ class OpsPilotHandler(BaseHTTPRequestHandler):
             self._handle_report(body)
             return
         json_response(self, 404, {"error": {"code": "NOT_FOUND", "message": "Route not found."}})
+
+    def do_OPTIONS(self) -> None:
+        path = urlsplit(self.path).path
+        if not path.startswith("/api/"):
+            json_response(self, 404, {"error": {"code": "NOT_FOUND", "message": "Route not found."}})
+            return
+        self.send_response(204)
+        send_security_headers(self)
+        self.end_headers()
 
     def _read_json_body(self) -> dict[str, Any]:
         try:

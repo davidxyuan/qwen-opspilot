@@ -210,6 +210,22 @@ class OpsPilotOfflineTests(unittest.TestCase):
             self.assertEqual("nosniff", response.headers["X-Content-Type-Options"])
             self.assertEqual("DENY", response.headers["X-Frame-Options"])
             self.assertIn("default-src 'self'", response.headers["Content-Security-Policy"])
+            self.assertEqual(app.PUBLIC_APP_ORIGIN, response.headers["Access-Control-Allow-Origin"])
+
+        preflight = urllib.request.Request(
+            self.base_url + "/api/run",
+            headers={
+                "Origin": app.PUBLIC_APP_ORIGIN,
+                "Access-Control-Request-Method": "POST",
+                "Access-Control-Request-Headers": "content-type",
+            },
+            method="OPTIONS",
+        )
+        with urllib.request.urlopen(preflight, timeout=3) as response:
+            self.assertEqual(204, response.status)
+            self.assertEqual(app.PUBLIC_APP_ORIGIN, response.headers["Access-Control-Allow-Origin"])
+            self.assertIn("POST", response.headers["Access-Control-Allow-Methods"])
+            self.assertEqual("Content-Type", response.headers["Access-Control-Allow-Headers"])
 
     def test_fixture_reset_hash_ids_sources_and_ambiguity(self) -> None:
         first = app.load_fixture()
@@ -930,15 +946,20 @@ class OpsPilotOfflineTests(unittest.TestCase):
     def test_browser_static_guard_avoids_html_sinks(self) -> None:
         source = Path("static/app.js").read_text(encoding="utf-8")
         html = Path("static/index.html").read_text(encoding="utf-8")
+        public_html = Path("docs/index.html").read_text(encoding="utf-8")
         for unsafe_sink in ("innerHTML", "outerHTML", "insertAdjacentHTML", "document.write"):
             self.assertNotIn(unsafe_sink, source)
         self.assertIn("textContent", source)
+        self.assertIn("apiUrl", source)
         for endpoint in ("/api/approve", "/api/reject", "/api/report"):
             self.assertIn(endpoint, source)
         self.assertIn("response.blob()", source)
         for control in ("approve-button", "reject-button", "report-button"):
             self.assertIn(f'id="{control}"', html)
+            self.assertIn(f'id="{control}"', public_html)
         self.assertGreaterEqual(html.count(" disabled"), 3)
+        self.assertIn("https://qwen-opspilot-monmjgpcrk.ap-southeast-1.fcapp.run", public_html)
+        self.assertNotIn("DASHSCOPE_API_KEY", public_html)
 
     def test_browser_runtime_handles_reset_races_hashes_and_hostile_text(self) -> None:
         smoke = r"""

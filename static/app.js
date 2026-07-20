@@ -1,6 +1,11 @@
 "use strict";
 
 const byId = (id) => document.getElementById(id);
+const apiBaseMeta = typeof document.querySelector === "function"
+  ? document.querySelector('meta[name="opspilot-api-base"]')
+  : null;
+const API_BASE = String(apiBaseMeta?.content || "").replace(/\/+$/, "");
+const apiUrl = (path) => `${API_BASE}${path}`;
 const state = {
   scenario: null,
   fixtureHash: null,
@@ -148,7 +153,7 @@ async function loadScenario() {
   clearRun();
   setStatus("Loading scenario...", "loading");
   try {
-    const payload = await readJson(await fetch("/api/scenario", {
+    const payload = await readJson(await fetch(apiUrl("/api/scenario"), {
       signal: operation.controller.signal,
     }));
     if (!isCurrentOperation(operation)) {
@@ -185,7 +190,7 @@ async function runInvestigation() {
   clearRun();
   setStatus("Running live Qwen investigation...", "running");
   try {
-    const payload = await readJson(await fetch("/api/run", {
+    const payload = await readJson(await fetch(apiUrl("/api/run"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ incident_id: incidentId }),
@@ -288,7 +293,7 @@ async function submitDecision(path, pendingLabel) {
   setRunEnabled(false);
   setStatus(pendingLabel, "running");
   try {
-    const payload = await readJson(await fetch(path, {
+    const payload = await readJson(await fetch(apiUrl(path), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ run: currentRun }),
@@ -342,7 +347,7 @@ async function downloadReport() {
   byId("report-button").disabled = true;
   setStatus("Building audit report...", "running");
   try {
-    const response = await fetch("/api/report", {
+    const response = await fetch(apiUrl("/api/report"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ run: currentRun, decision: currentDecision }),
@@ -381,7 +386,7 @@ async function showPolicyDenial() {
   const result = byId("policy-result");
   result.textContent = "Checking policy...";
   try {
-    const payload = await readJson(await fetch("/api/policy-check", {
+    const payload = await readJson(await fetch(apiUrl("/api/policy-check"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: "{}",
