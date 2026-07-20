@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Qwen OpsPilot architecture</title>
+  <desc id="desc">A browser calls an Alibaba Cloud Function Compute Python web function. The function calls Qwen Cloud, reads an immutable incident fixture through allowlisted tools, signs the simulated human decision, verifies a clone, and returns an audit report.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07131d"/>
+      <stop offset="1" stop-color="#102d3f"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#02070b" flood-opacity=".45"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#77e4c8"/>
+    </marker>
+    <style>
+      .title{font:700 34px system-ui,sans-serif;fill:#edf4f7}.sub{font:500 16px system-ui,sans-serif;fill:#a8bdc8}.box{fill:#0b1923;stroke:#36586b;stroke-width:2;rx:18;filter:url(#shadow)}.accent{fill:#102d2d;stroke:#77e4c8}.warn{fill:#2b2313;stroke:#ffca6c}.h{font:700 20px system-ui,sans-serif;fill:#edf4f7}.t{font:500 14px system-ui,sans-serif;fill:#bcd0d9}.tag{font:700 12px system-ui,sans-serif;fill:#77e4c8}.line{fill:none;stroke:#77e4c8;stroke-width:3;marker-end:url(#arrow)}.dash{stroke-dasharray:8 7}.label{font:700 12px system-ui,sans-serif;fill:#ffdf9d}
+    </style>
+  </defs>
+  <rect width="1200" height="720" fill="url(#bg)"/>
+  <text x="70" y="68" class="title">Qwen OpsPilot</text>
+  <text x="70" y="96" class="sub">Evidence-first diagnosis · signed human approval · clone-only verification</text>
+
+  <rect x="55" y="215" width="225" height="170" class="box"/>
+  <text x="82" y="255" class="tag">JUDGE / OPERATOR</text>
+  <text x="82" y="290" class="h">Web browser</text>
+  <text x="82" y="322" class="t">Same-origin UI</text>
+  <text x="82" y="347" class="t">Approve or Reject</text>
+  <text x="82" y="372" class="t">Download report</text>
+
+  <rect x="390" y="145" width="420" height="310" class="box accent"/>
+  <text x="420" y="185" class="tag">ALIBABA CLOUD FUNCTION COMPUTE</text>
+  <text x="420" y="220" class="h">Python standard-library web function</text>
+  <text x="420" y="258" class="t">1. Validate incident and Qwen configuration</text>
+  <text x="420" y="286" class="t">2. Enforce closed read-only tool schemas</text>
+  <text x="420" y="314" class="t">3. Validate citations and fixed proposal</text>
+  <text x="420" y="342" class="t">4. Verify HMAC-bound human decision</text>
+  <text x="420" y="370" class="t">5. Change request-scoped clone only</text>
+  <text x="420" y="398" class="t">6. Run 5 deterministic checks and report</text>
+  <rect x="420" y="417" width="348" height="23" rx="12" fill="#ffca6c"/>
+  <text x="438" y="433" style="font:800 12px system-ui,sans-serif;fill:#211705">SIMULATED — NO REAL HOST CHANGED</text>
+
+  <rect x="920" y="145" width="225" height="150" class="box"/>
+  <text x="947" y="185" class="tag">QWEN CLOUD</text>
+  <text x="947" y="220" class="h">qwen3.7-plus</text>
+  <text x="947" y="252" class="t">Plan → tool calls</text>
+  <text x="947" y="277" class="t">→ cited diagnosis</text>
+
+  <rect x="920" y="360" width="225" height="150" class="box warn"/>
+  <text x="947" y="400" class="label">SERVER-SIDE SECRETS</text>
+  <text x="947" y="435" class="h">Environment only</text>
+  <text x="947" y="467" class="t">Qwen API key</text>
+  <text x="947" y="492" class="t">Approval HMAC secret</text>
+
+  <rect x="390" y="555" width="420" height="110" class="box"/>
+  <text x="420" y="595" class="tag">IMMUTABLE SYNTHETIC EVIDENCE</text>
+  <text x="420" y="630" class="h">Host A / Host B watchdog fixture</text>
+  <text x="420" y="654" class="t">Stable IDs and SHA-256 hash · fresh deep copy per request</text>
+
+  <path d="M280 300 L385 300" class="line"/>
+  <text x="306" y="284" class="sub">HTTPS JSON</text>
+  <path d="M810 220 L915 220" class="line"/>
+  <text x="830" y="202" class="sub">3 responses</text>
+  <path d="M920 435 L815 375" class="line dash"/>
+  <path d="M600 455 L600 550" class="line"/>
+  <text x="616" y="510" class="sub">allowlisted reads</text>
+</svg>

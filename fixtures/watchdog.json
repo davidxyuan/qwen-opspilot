@@ -1,0 +1,49 @@
+{
+  "fixture_version": "1.0",
+  "incident_id": "watchdog-window-flash",
+  "symptom": "Host A flashes a PowerShell window every minute while Host B runs the equivalent watchdog without interrupting the desktop.",
+  "hosts": {
+    "A": {
+      "label": "Host A",
+      "task_definition": [
+        {"id": "task-a-logon-type", "field": "logon_type", "value": "InteractiveToken", "source": "scheduled_task_definition"},
+        {"id": "task-a-state", "field": "state", "value": "Ready", "source": "scheduled_task_status"},
+        {"id": "task-a-last-result", "field": "last_task_result", "value": 0, "source": "scheduled_task_status"},
+        {"id": "task-a-executable", "field": "executable", "value": "powershell.exe", "source": "scheduled_task_action"},
+        {"id": "task-a-arguments", "field": "arguments", "value": "-NoProfile -WindowStyle Hidden -File C:\\OpsPilot\\watchdog.ps1", "source": "scheduled_task_action"},
+        {"id": "task-a-hidden", "field": "hidden", "value": true, "source": "scheduled_task_settings"},
+        {"id": "task-a-window-style", "field": "window_style", "value": "Hidden", "source": "scheduled_task_action"}
+      ],
+      "runtime_context": [
+        {"id": "runtime-a-session-id", "field": "session_id", "value": 1, "source": "process_snapshot"},
+        {"id": "runtime-a-interactive", "field": "interactive", "value": true, "source": "process_snapshot"}
+      ],
+      "launcher_settings": [
+        {"id": "launcher-a-executable", "field": "executable", "value": "powershell.exe", "source": "launcher_configuration"},
+        {"id": "launcher-a-arguments", "field": "arguments", "value": "-NoProfile -WindowStyle Hidden -File C:\\OpsPilot\\watchdog.ps1", "source": "launcher_configuration"},
+        {"id": "launcher-a-window-style", "field": "window_style", "value": "Hidden", "source": "launcher_configuration"}
+      ]
+    },
+    "B": {
+      "label": "Host B",
+      "task_definition": [
+        {"id": "task-b-logon-type", "field": "logon_type", "value": "S4U", "source": "scheduled_task_definition"},
+        {"id": "task-b-state", "field": "state", "value": "Ready", "source": "scheduled_task_status"},
+        {"id": "task-b-last-result", "field": "last_task_result", "value": 0, "source": "scheduled_task_status"},
+        {"id": "task-b-executable", "field": "executable", "value": "powershell.exe", "source": "scheduled_task_action"},
+        {"id": "task-b-arguments", "field": "arguments", "value": "-NoProfile -WindowStyle Hidden -File C:\\OpsPilot\\watchdog.ps1", "source": "scheduled_task_action"},
+        {"id": "task-b-hidden", "field": "hidden", "value": true, "source": "scheduled_task_settings"},
+        {"id": "task-b-window-style", "field": "window_style", "value": "Hidden", "source": "scheduled_task_action"}
+      ],
+      "runtime_context": [
+        {"id": "runtime-b-session-id", "field": "session_id", "value": 0, "source": "process_snapshot"},
+        {"id": "runtime-b-interactive", "field": "interactive", "value": false, "source": "process_snapshot"}
+      ],
+      "launcher_settings": [
+        {"id": "launcher-b-executable", "field": "executable", "value": "powershell.exe", "source": "launcher_configuration"},
+        {"id": "launcher-b-arguments", "field": "arguments", "value": "-NoProfile -WindowStyle Hidden -File C:\\OpsPilot\\watchdog.ps1", "source": "launcher_configuration"},
+        {"id": "launcher-b-window-style", "field": "window_style", "value": "Hidden", "source": "launcher_configuration"}
+      ]
+    }
+  }
+}
